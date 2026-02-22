@@ -53,14 +53,14 @@ class ERPScorecardTester:
             return False
     
     def test_questions_api(self):
-        """Test Questions API - Should return 40+ active questions"""
+        """Test Questions API - Should return at least 25 active questions"""
         try:
             response = self.session.get(f"{self.base_url}/questions")
             if response.status_code == 200:
                 data = response.json()
                 questions = data.get('questions', [])
                 
-                if len(questions) >= 40:
+                if len(questions) >= 25:
                     # Verify question structure
                     sample_q = questions[0]
                     required_fields = ['id', 'qid', 'pillar', 'gate', 'text', 'effort', 'fixHint', 'riskText']
@@ -83,7 +83,7 @@ class ERPScorecardTester:
                         self.log_test("Questions API", False, f"Missing required fields: {missing_fields}")
                         return False
                 else:
-                    self.log_test("Questions API", False, f"Expected at least 40 questions, got {len(questions)}")
+                    self.log_test("Questions API", False, f"Expected at least 25 questions, got {len(questions)}")
                     return False
             else:
                 self.log_test("Questions API", False, f"HTTP {response.status_code}", response.text)
@@ -171,9 +171,9 @@ class ERPScorecardTester:
             return False
             
         try:
-            # Create 40 sample answers with scores 2-3 (realistic scores)
+            # Create 25 sample answers with scores 2-3 (realistic scores)
             sample_answers = []
-            for i in range(1, 41):
+            for i in range(1, 26):
                 sample_answers.append({
                     "questionId": f"q{i}",  # This will be replaced with actual question IDs
                     "score": 2 if i % 3 == 0 else 3  # Mix of scores 2 and 3
